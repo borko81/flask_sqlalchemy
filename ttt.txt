@@ -1,0 +1,6 @@
+• Template vs REST app;
+• FlaskRestfull;
+• HTTP protocol;
+• Virtual environment;
+• Simple one-file app without db demo;
+• POSTMAN.
