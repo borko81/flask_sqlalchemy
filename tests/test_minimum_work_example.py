@@ -40,12 +40,12 @@ class Testing(BaseTest):
 
     def test_post(self):
         item = 'For testing'
-        response = self.app.post('/todos', data={'task': item})
+        _ = self.app.post('/todos', data={'task': item})
         data = json.loads(self.app.get('/todos').get_data())
         self.assertEqual(len(data), total_item + 1)
 
     def test_new_item_from_todos(self):
-        response = self.app.put('/todos/checking', data={'task': 'Put item'})
+        _ = self.app.put('/todos/checking', data={'task': 'Put item'})
         self.assertEqual(minimal_work_example.TODOS['checking']['task'], 'Put item')
         data = json.loads(self.app.get('/todos').get_data())
         self.assertEqual(len(data), total_item + 1)

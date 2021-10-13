@@ -3,4 +3,4 @@
 • HTTP protocol;
 • Virtual environment;
 • Simple one-file app without db demo;
-• POSTMAN.
+• POSTMAN..
