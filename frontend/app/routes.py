@@ -1,6 +1,10 @@
+import json
+
 from app import app
 from app.forms import LoginForm
-from flask import flash, render_template, redirect, url_for, request
+from flask import flash, render_template, redirect, url_for, request, jsonify, make_response
+
+from app.models import Post, PostSchema, User, UserSchema
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -26,3 +30,18 @@ def check_it_work():
     ]
     user = {'username': 'Borko'}
     return render_template('index.html', **user, title="Check Page", posts=posts)
+
+
+@app.route('/show_users')
+def show_users():
+    users = User.query.all()
+    print(users)
+    schema = UserSchema(many=True)
+    print(schema.dump(users))
+    return jsonify(schema.dump(users))
+
+@app.route('/show_posts')
+def show_posts():
+    post = Post.query.all()
+    schema = PostSchema(many=True)
+    return jsonify(schema.dump(post))
