@@ -1,6 +1,5 @@
 from flask_marshmallow import Marshmallow, fields
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, fields
-from marshmallow_sqlalchemy.fields import Related
 
 from models import Group, Product
 

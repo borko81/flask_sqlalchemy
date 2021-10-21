@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from helper_model import Helper
 
-db = SQLAlchemy()
+from config import db
 
 
 class Group(Helper):
