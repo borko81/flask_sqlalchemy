@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>Show All Towns</h3>
+<div id="result">
+    <ul id="list"></ul>
+</div>
+
+<script>
+
+    addData = function (name) {
+        let ul = document.getElementById("list");
+        let li = document.createElement('li');
+        li.appendChild(document.createTextNode(name))
+        ul.append(li)
+    }
+
+    const url = '/towns'
+
+    fetch(url, {
+        method: 'GET',
+        headers: {
+           "Content-Type": "application/json",
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        data['towns'].forEach(x => {
+            addData(x.name)
+        })
+    })
+
+</script>
+</body>
+</html>
