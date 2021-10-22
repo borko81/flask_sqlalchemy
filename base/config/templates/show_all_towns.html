@@ -5,12 +5,59 @@
     <title>Title</title>
 </head>
 <body>
-<h3>Show All Towns</h3>
+<h3>Add new Town</h3>
+<form action="" method="POST">
+    <input type="text" id="town">
+    <button id="savebutton">Save</button>
+</form>
+<hr>
+<h3>Delete_Town</h3>
+<form action="" method="POST">
+    <input type="text" id="town_to_delete">
+    <button id="deletebutton">Save</button>
+</form>
+<hr>
+<h3>Show_All_Towns</h3>
 <div id="result">
     <ul id="list"></ul>
 </div>
 
 <script>
+    const url = '/towns'
+
+    const but = document.querySelector('#savebutton');
+    but.addEventListener('click', function (e) {
+        let name = document.querySelector('#town').value
+        let choice = confirm('Are you sure want to save date')
+        if (choice) {
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({'name': name})
+            })
+                .then(response => response.json())
+        }
+
+    })
+
+    const butdel = document.querySelector('#deletebutton');
+    butdel.addEventListener('click', function (e) {
+        let name = document.querySelector('#town_to_delete').value
+        let choice = confirm('Are you sure want to delete this name')
+        if (choice) {
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({'name': name})
+            })
+                .then(response => response.json())
+        }
+
+    })
 
     addData = function (name) {
         let ul = document.getElementById("list");
@@ -19,20 +66,19 @@
         ul.append(li)
     }
 
-    const url = '/towns'
 
     fetch(url, {
         method: 'GET',
         headers: {
-           "Content-Type": "application/json",
+            "Content-Type": "application/json",
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        data['towns'].forEach(x => {
-            addData(x.name)
+        .then(response => response.json())
+        .then(data => {
+            data['towns'].forEach(x => {
+                addData(x.name)
+            })
         })
-    })
 
 </script>
 </body>

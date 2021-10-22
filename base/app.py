@@ -14,7 +14,7 @@ def hello_name(name):
     return f"Hello {name}"
 
 
-@app.route('/towns', methods=['GET', 'POST'])
+@app.route('/towns', methods=['GET', 'POST', 'DELETE'])
 def show_towns():
     if request.method == 'GET':
         towns = TownModel.query.all()
@@ -28,9 +28,15 @@ def show_towns():
         t = TownModel(name=name)
         t.save()
         return {'message': 'New town was created successfully'}, 201
+    elif request.method == 'DELETE':
+        data = request.get_json()
+        name = data['name']
+        t = TownModel.find_from_name(name)
+        t.delete()
 
 
-@app.route('/show_towns')
+
+@app.route('/show_towns', methods=['GET', 'POST'])
 def show_towns_in_template():
     return render_template('show_all_towns.html')
 

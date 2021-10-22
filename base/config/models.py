@@ -15,6 +15,14 @@ class TownModel(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    @classmethod
+    def find_from_name(cls, name):
+        return cls.query.filter_by(name=name).first()
+
 
 class NameModel(db.Model):
     __tablename__ = 'names'
