@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .container {
+            width: 500px;
+            margin: 10px auto;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h3>Login Page</h3>
+    <form action="" id="login-form" method="POST">
+        <div>
+            <label for="">Username
+                <input type="text" placeholder="username" id="username" name="username">
+            </label>
+        </div>
+        <div>
+            <label for="">Password
+                <input type="password" placeholder="password" id="password" name="password">
+            </label>
+        </div>
+        <div>
+            <button id="login_button">Save</button>
+        </div>
+    </form>
+    <a href="{{ url_for('register') }}">Register</a>
+</div>
+
+
+</body>
+</html>

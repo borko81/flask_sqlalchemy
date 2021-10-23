@@ -1,15 +1,49 @@
-from flask import request, render_template
+from flask import request, render_template, session, redirect, url_for, flash
 
 from config import app
-from config.models import TownModel
+from config.models import TownModel, UserModel
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        if username and password:
+            u = UserModel.find_user_by_name(username)
+            if u and u.check_password(password):
+                session['username_login'] = username
+                return redirect(url_for('hello'))
+            return f'{username} is not authenticated'
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        password2 = request.form.get('password2')
+        print(password, password2)
+        if not password2 == password:
+            flash('Password did not much')
+            return redirect(url_for('register'))
+        u = UserModel(name=username, password=password)
+        u.hashed_password(u.password)
+        u.save()
+        return redirect(url_for('login'))
+    return render_template('register.html')
 
 
 @app.route('/')
 def hello():
-    return "Test if work"
+    if 'username_login' in session:
+        return "Test if work"
+    return 'Not login'
 
 
-@app.route('/<name>')
+@app.route('/username/<name>')
 def hello_name(name):
     return f"Hello {name}"
 
