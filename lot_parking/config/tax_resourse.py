@@ -36,24 +36,37 @@ class AllTaxResurse(Resource):
         args = self.parser.parse_args()
         name = args['name']
         price = args['price']
-        TaxModel(name=name, price=price).save_to_db()
-        return {'message': 'New Tax was created successfully'}, 201
+        if args and price:
+            TaxModel(name=name, price=price).save_to_db()
+            return {'message': 'New Tax was created successfully'}, 201
+        return {'message': 'Error invalid param'}, 400
 
     def delete(self):
         args = self.parser.parse_args()
         """
             By type of args, use two different methods to delete from database
+            If id in data, search in data, if name in data, search tax with name,
+            if id and name in data, search by first parameter.
+            If not add correct data return error message
             hint: 
                 curl 127.0.0.1:5000/tax -X DELETE -d "id=3"
                 curl 127.0.0.1:5000/tax -X DELETE -d "name=tax_four"
         """
         if args['id']:
             _id = args['id']
-            TaxModel.find_by_id(_id).delete_from_db()
-            return {'message': 'Successfully delete tax by id'}, 204
-        else:
-            TaxModel.find_by_name(args['name']).delete_from_db()
-            return {'message': 'Successfully delete tax by name'}, 204
+            t = TaxModel.find_by_id(_id)
+            if t:
+                t.delete_from_db()
+                return {'message': 'Successfully delete tax by id'}, 204
+            else:
+                return {'message': 'Gain error'}, 400
+        elif args['name']:
+            t = TaxModel.find_by_name(args['name'])
+            if t:
+                t.delete_from_db()
+                return {'message': 'Successfully delete tax by name'}, 204
+            return {'message': 'Gain error'}, 400
+        return {'message': 'Gain error'}, 400
 
 
 class TaxResurse(Resource):
@@ -68,7 +81,7 @@ class TaxResurse(Resource):
     def get(self, _id):
         tax = TaxModel.find_by_id(_id)
         if not tax:
-            return {'message': 'Cannot find id'}, 401
+            return {'message': 'Cannot find id'}, 400
         data = {'tax': {'id': tax.id, 'name': tax.name, 'price': tax.price,
                         'car_in_this_tax': [t.to_json() for t in tax.cars]}}
         return data, 200
@@ -84,7 +97,7 @@ class TaxResurse(Resource):
         args = self.parser.parse_args()
 
         if not tax:
-            return {'message': 'Not found tax with this id'}, 401
+            return {'message': 'Not found tax with this id'}, 400
 
         tax.name = args['name'] or tax.name
         tax.price = args['price'] or tax.price
