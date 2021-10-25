@@ -3,7 +3,10 @@ from flask import jsonify
 from config import api
 from config.models import TaxModel
 from flask_restful import Resource, reqparse
+from flask_jwt_extended import jwt_required
 
+# TODO : Add @jwt_required() where needed when all finished!!!!!!!
+# TODO: tests must be changed!!!!!
 
 class AllTaxResurse(Resource):
     """
@@ -14,6 +17,7 @@ class AllTaxResurse(Resource):
     parser.add_argument('price', help='Price is required')
     parser.add_argument('id', type=int, help='Price', required=False)
 
+    # @jwt_required()
     def get(self):
         """
         hint:
