@@ -1,6 +1,7 @@
 from config.helper_model import ModuleHelper, db
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.orm import validates
 
 
 class UserModel(ModuleHelper):
@@ -11,6 +12,15 @@ class UserModel(ModuleHelper):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=False)
+
+    @validates('password')
+    def validate_password(self, key, password):
+        check = '1 2 3 4 5 6 7 8 9'.split()
+        if not any(i in password for i in check):
+            raise ValueError("Password there must be at least one number")
+        if not len(password) >= 4:
+            raise ValueError("Password must be at least four character")
+        return password
 
     def hashed_password(self, password):
         self.password = generate_password_hash(password)

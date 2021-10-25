@@ -29,10 +29,13 @@ class UserResourse(Resource):
         name = data['name']
         password = data['password']
         if not UserModel.find_by_name(name):
-            u = UserModel(name=name, password=password)
-            u.hashed_password(password)
-            u.save()
-            return {'message': 'User was created successfully'}, 201
+            try:
+                u = UserModel(name=name, password=password)
+                u.hashed_password(password)
+                u.save()
+                return {'message': 'User was created successfully'}, 201
+            except ValueError as err:
+                return {'message': f'{err}'}, 400
         return {'message': 'Not allowed this name'}, 400
 
 
