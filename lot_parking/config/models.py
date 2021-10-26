@@ -1,3 +1,5 @@
+import json
+
 from config.helper_model import ModuleHelper, db
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -65,6 +67,11 @@ class ParkingModel(db.Model):
 
     def __repr__(self):
         return CarModel.find_by_id(self.car_id)
+
+    def to_json(self):
+        a = CarModel.find_by_id(self.car_id)
+        print()
+        return {'name': a.name, 'in': str(self.in_lot)}
 
     def save_to_db(self):
         db.session.add(self)
