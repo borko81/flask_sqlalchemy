@@ -8,7 +8,17 @@ from flask_jwt_extended import jwt_required
 
 class ParkingResourse(Resource):
     def get(self):
-        parking = ParkingModel.query.all()
+        """
+        hint:
+            - For show all car's in parking : curl $URL
+            - For show only income car without has out date : curl $URL?only_income=1
+        :return:
+        """
+        only_income = request.args.get('only_income', type=int)
+        if not only_income:
+            parking = ParkingModel.query.all()
+            return {'cars': [p.to_json() for p in parking]}
+        parking = ParkingModel.query.filter_by(out_lot=None).all()
         return {'cars': [p.to_json() for p in parking]}
 
     def post(self):

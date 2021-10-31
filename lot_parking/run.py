@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, render_template
 
 from config import app, api
 from config.tax_resourse import AllTaxResurse, TaxResurse
@@ -6,7 +6,6 @@ from config.user_resourse import UserResourse, UserJWT
 from config.car_resourse import CarResourse, CarsResourse
 from config.parking_resourse import ParkingResourse
 from flasgger import Swagger
-from flasgger.utils import swag_from
 swagger = Swagger(app)
 
 
@@ -27,6 +26,10 @@ def some_json():
     return jsonify(success=True)
 
 
+@app.route('/taxes')
+def taxes():
+    # curl 127.0.0.1:5000/tax
+    return render_template('taxes.html')
 
 
 if __name__ == '__main__':

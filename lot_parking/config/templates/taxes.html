@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<h3>Taxes</h3>
+
+<div id="result">
+    <table id="res"></table>
+    <ul id="detail"></ul>
+</div>
+
+<script>
+    const URL = "http://127.0.0.1:5000/tax"
+
+    function createEl() {
+        return document.createElement("td")
+    }
+
+    function insert_data_to_td(where, something) {
+        where.textContent = something
+        return where
+    }
+
+    function info(e) {
+        let IDURL = URL + '/' + e
+        fetch(IDURL, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                let id_detail = data['tax'].car_in_this_tax
+                let detail = document.getElementById("detail")
+                detail.innerHTML = ""
+                id_detail.forEach(x => {
+                    let li = document.createElement("li")
+                    li.textContent = x.name + " Card :" + x.card
+                    detail.appendChild(li)
+                })
+            })
+    }
+
+    function info2(array) {
+        console.log("A")
+    }
+
+    fetch(URL, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data['tax'][0].car_in_this_tax)
+            const d = data['tax']
+            const t = document.getElementById("res")
+            d.forEach(x => {
+                console.log(x.car_in_this_tax)
+                let tr = document.createElement("tr");
+                let td_id = createEl()
+                let td_name = createEl()
+                let td_price = createEl()
+                let show_info = createEl()
+
+                show_info.innerHTML = `<button data-value=${x.id} onclick="info(${x.id});" id="info">Show</button>`;
+
+                tr.appendChild(insert_data_to_td(td_id, x.id))
+                tr.appendChild(insert_data_to_td(td_name, x.name))
+                tr.appendChild(insert_data_to_td(td_price, x.price))
+                tr.appendChild(show_info)
+                t.appendChild(tr)
+
+
+            })
+        })
+</script>
+</body>
+</html>
